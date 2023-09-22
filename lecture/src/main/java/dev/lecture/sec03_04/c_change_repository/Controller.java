@@ -15,4 +15,9 @@ public class Controller {
     public void someApi() {
         service.createArticle("");
     }
+
+    @GetMapping("/change-repository")
+    public void changeToFileRepository() {
+        service.changeRepository();
+    }
 }

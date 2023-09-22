@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@Order(0)
+@Order(1)
 @Component
 public class FileRepository implements Repository {
     @Override
