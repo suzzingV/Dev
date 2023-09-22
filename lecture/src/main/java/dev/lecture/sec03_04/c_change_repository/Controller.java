@@ -1,4 +1,4 @@
-package dev.lecture.sec03_04.a_spring_framework;
+package dev.lecture.sec03_04.c_change_repository;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,8 +11,8 @@ public class Controller {
         this.service = service;
     }
 
-    @GetMapping(value = "/some-api")
+    @GetMapping("/some-api")
     public void someApi() {
-        service.createArticle("의미 없는 데이터");
+        service.createArticle("");
     }
 }
