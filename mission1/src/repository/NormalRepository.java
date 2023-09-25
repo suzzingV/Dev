@@ -6,6 +6,7 @@ import java.io.*;
 import java.nio.BufferOverflowException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class NormalRepository implements Repository {
     File file = new File("C:/Users/skylim/IdeaProjects/lecture/mission1/src/도서.csv");
@@ -117,16 +118,15 @@ public class NormalRepository implements Repository {
 
     @Override
     public void deleteBook(int id) throws IOException {
-        Book selectedBook = books.stream().filter(book -> book.getId() == id)
-                .findAny()
-                .get();
-
-        if(selectedBook == null) {
-            System.out.println("[System] 존재하지 않는 도서번호 입니다.");
-        } else {
+        try {
+            Book selectedBook = books.stream().filter(book -> book.getId() == id)
+                    .findAny()
+                    .get();
             books.remove(selectedBook);
             updateFile(books, file);
             System.out.println("[System] 도서가 삭제 처리 되었습니다.");
+        } catch (NoSuchElementException e) {
+            System.out.println("[System] 존재하지 않는 도서번호 입니다.");
         }
     }
 
