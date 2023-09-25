@@ -7,6 +7,11 @@ public class Book {
     int page;
     String state;
 
+    public Book() {
+        this.id = id;
+        this.state = "대여 가능";
+    }
+
     public int getId() {
         return id;
     }
