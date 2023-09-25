@@ -28,15 +28,6 @@ public class TestRepository implements Repository {
         });
     }
 
-    private void printBookInfo(Book book) throws IOException {
-        bw.write("\n도서번호 : " + String.valueOf(book.getId())
-                + "\n제목 : " + book.getTitle()
-                + "\n작가 이름 : " + book.getWriter()
-                + "\n페이지 수: " + String.valueOf(book.getPage()) + "페이지"
-                + "\n상태 : " + book.getState()
-                + "\n\n------------------------------");
-    }
-
     public void search(String titleWord) {
         books.stream().forEach(book -> {
             String title = book.getTitle();

@@ -21,6 +21,7 @@ public class Service {
         bw.write("Q. 페이지 수를 입력하세요.");
         book.setPage(Integer.parseInt(bf.readLine()));
 
+        book.setState("대여 가능");
         repository.register(book);
         bw.write("[System] 도서 등록이 완료되었습니다.");
     }

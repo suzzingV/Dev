@@ -9,7 +9,7 @@ public class Mode {
     BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
     BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     Service service;
-    public Mode(String mode) {
+    public Mode(String mode) throws IOException {
         if(mode.equals("normal")) service = new NormalService();
         else if(mode.equals("test")) service = new TestService();
     }
