@@ -1,3 +1,6 @@
+import domain.ModeType;
+import service.Mode;
+
 import java.io.*;
 
 public class Main {

@@ -1,3 +1,5 @@
+package service;
+
 import repository.NormalRepository;
 import repository.TestRepository;
 
@@ -6,10 +8,10 @@ import java.io.*;
 public class Mode {
     BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
     BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    Menu menu;
+    Service service;
     public Mode(String mode) {
-        if(mode.equals("normal")) menu = new Menu(new NormalRepository());
-        else if(mode.equals("test")) menu = new Menu(new TestRepository());
+        if(mode.equals("normal")) service = new NormalService();
+        else if(mode.equals("test")) service = new TestService();
     }
 
     public void run() throws IOException {
@@ -18,25 +20,25 @@ public class Mode {
         String num = bf.readLine();
         if(num.equals("1")) {
             bw.write("[System] 도서 등록 메뉴로 넘어갑니다.");
-            menu.register();
+            service.register();
         } else if(num.equals("2")) {
             bw.write("[System] 전체 도서 목록입니다.");
-            menu.list();
+            service.list();
         } else if(num.equals("3")) {
             bw.write("[System] 제목으로 도서 검색 메뉴로 넘어갑니다.");
-            menu.search();
+            service.search();
         } else if(num.equals("4")) {
             bw.write("[System] 도서 대여 메뉴로 넘어갑니다.");
-            menu.rental();
+            service.rental();
         } else if(num.equals("5")) {
             bw.write("[System] 도서 반납 메뉴로 넘어갑니다.");
-            menu.returnBook();
+            service.returnBook();
         } else if(num.equals("6")) {
             bw.write("[System] 도서 분실 처리 메뉴로 넘어갑니다.");
-            menu.lostBook();
+            service.lostBook();
         } else if(num.equals("7")) {
             bw.write("[System] 도서 삭제 처리 메뉴로 넘어갑니다.");
-            menu.deleteBook();
+            service.deleteBook();
         }
     }
 

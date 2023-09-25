@@ -1,5 +1,7 @@
 package repository;
 
+import domain.Book;
+
 import java.io.*;
 
 public interface Repository {

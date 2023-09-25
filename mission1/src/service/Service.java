@@ -1,15 +1,14 @@
-import repository.Book;
+package service;
+
+import domain.Book;
 import repository.Repository;
 
 import java.io.*;
 
-public class Menu {
-    public static Repository repository = null;
+public class Service {
+    private static Repository repository = null;
     BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
     BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    Menu(Repository repository) {
-        this.repository = repository;
-    }
 
     public void register() throws IOException {
         Book book = new Book();
@@ -62,5 +61,4 @@ public class Menu {
         int id = Integer.parseInt(bf.readLine());
         repository.deleteBook(id);
     }
-
 }

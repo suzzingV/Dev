@@ -1,5 +1,7 @@
 package repository;
 
+import domain.Book;
+
 import java.io.IOException;
 
 public class NormalRepository implements Repository {
