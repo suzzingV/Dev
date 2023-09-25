@@ -18,6 +18,7 @@ public class NormalRepository implements Repository {
     @Override
     public void register(Book book) throws IOException {
         book.setState("대여 가능");
+        book.setId(books.hashCode());
         books.add(book);
         updateFile(books, file);
     }
@@ -58,16 +59,38 @@ public class NormalRepository implements Repository {
         }
     }
 
+    private class ChangeStateThread extends Thread {
+        private Book book;
+
+        public ChangeStateThread(Book book) {
+            this.book = book;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(300000);
+                book.setState("대여 가능");
+                updateFile(books, file);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
     @Override
     public void returnBook(int id) throws IOException {
         Book selectedBook = books.stream().filter(book -> book.getId() == id)
                 .findAny()
                 .get();
+        ChangeStateThread thread = new ChangeStateThread(selectedBook);
 
         if (selectedBook.getState().equals("대여중") || selectedBook.getState().equals("분실됨")) {
             selectedBook.setState("도서 정리중");
             updateFile(books, file);
-            //5분 지나면 selectedBook.setState("대여 가능");
+            thread.start();
+
             System.out.println("[System] 도서가 반납 처리 되었습니다.");
         } else if(selectedBook.getState().equals("대여 가능")) {
             System.out.println("[System] 원래 대여가 가능한 도서입니다.");
@@ -112,7 +135,7 @@ public class NormalRepository implements Repository {
         books.stream().forEach(book -> {
             try {
                 bw.write(String.valueOf(book.getId()) + "," + book.getTitle() + ","
-                        + book.getWriter() + "," + String.valueOf(book.getPage()) + "," + book.getState());
+                        + book.getWriter() + "," + String.valueOf(book.getPage()) + "," + book.getState() + "\n");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

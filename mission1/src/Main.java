@@ -6,7 +6,7 @@ import java.io.*;
 public class Main {
     public static void main(String[] args) throws IOException {
         Mode mode = selectMode();
-        for(int i = 0; i < 4; i++)  mode.run();
+        while(true) mode.run();
     }
 
     public static Mode selectMode() throws IOException {

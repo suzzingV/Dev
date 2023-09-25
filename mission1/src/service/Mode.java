@@ -38,6 +38,9 @@ public class Mode {
         } else if(num.equals("7")) {
             System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다.");
             service.deleteBook();
+        } else {
+            System.out.println("프로그램을 종료합니다.");
+            System.exit(0);
         }
     }
 

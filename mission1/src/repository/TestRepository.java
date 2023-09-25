@@ -13,6 +13,7 @@ public class TestRepository implements Repository {
 
     public void register(Book book) {
         book.setState("대여 가능");
+        book.setId(hashCode());
         books.add(book);
         //파일에 등록
     }
@@ -48,15 +49,34 @@ public class TestRepository implements Repository {
         }
     }
 
+    private class ChangeStateThread extends Thread {
+        private Book book;
+
+        public ChangeStateThread(Book book) {
+            this.book = book;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(300000);
+                book.setState("대여 가능");
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @Override
     public void returnBook(int id) {
         Book selectedBook = books.stream().filter(book -> book.getId() == id)
                 .findAny()
                 .get();
+        ChangeStateThread thread = new ChangeStateThread(selectedBook);
 
         if (selectedBook.getState().equals("대여중") || selectedBook.getState().equals("분실됨")) {
             selectedBook.setState("도서 정리중");
-            //5분 지나면 selectedBook.setState("대여 가능");
+            thread.start();
             System.out.println("[System] 도서가 반납 처리 되었습니다.");
         } else if(selectedBook.getState().equals("대여 가능")) {
             System.out.println("[System] 원래 대여가 가능한 도서입니다.");
