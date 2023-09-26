@@ -6,18 +6,16 @@ import java.io.IOException;
 import java.util.function.BiFunction;
 
 public enum ModeType {
-    NORMAL((Runnable)() -> {
-        System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.");
+    NORMAL("일반 모드"),
+    TEST("테스트 모드");
 
-    }),
-    TEST((Runnable)() -> {
-        System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다.");
-        return new Mode("test");
-    });
+    public String mode;
 
-    ModeType(Mode expression) {
-        this.expression = expression;
+    ModeType(String num) {
+        this.mode = num;
     }
 
-    private Mode expression;
+    public void performFunction() {
+
+    }
 }

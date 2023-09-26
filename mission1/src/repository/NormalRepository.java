@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class NormalRepository implements Repository {
-    File file = new File("C:/Users/skylim/IdeaProjects/lecture/mission1/src/도서.csv");
+    File file = new File("C:/atti/Dev/mission1/src/도서.csv");
     List<Book> books = new ArrayList<>();
 
     public NormalRepository() throws IOException {
@@ -43,20 +43,24 @@ public class NormalRepository implements Repository {
 
     @Override
     public void rental(int id) throws IOException {
-        Book selectedBook = books.stream().filter(book -> book.getId() == id)
-                .findAny()
-                .get();
+        try {
+            Book selectedBook = books.stream().filter(book -> book.getId() == id)
+                    .findAny()
+                    .get();
 
-        if (selectedBook.getState().equals("대여중")) {
-            System.out.println("[System] 이미 대여중인 도서입니다.");
-        } else if(selectedBook.getState().equals("대여 가능")) {
-            selectedBook.setState("대여중");
-            updateFile(books, file);
-            System.out.println("[System] 도서가 대여 처리 되었습니다.");
-        } else if(selectedBook.getState().equals("도서 정리중")){
-            System.out.println("[System] 정리 중인 도서입니다.");
-        } else if(selectedBook.getState().equals("분실됨")) {
-            System.out.println("[System] 분실된 도서입니다.");
+            if (selectedBook.getState().equals("대여중")) {
+                System.out.println("[System] 이미 대여중인 도서입니다.");
+            } else if (selectedBook.getState().equals("대여 가능")) {
+                selectedBook.setState("대여중");
+                updateFile(books, file);
+                System.out.println("[System] 도서가 대여 처리 되었습니다.");
+            } else if (selectedBook.getState().equals("도서 정리중")) {
+                System.out.println("[System] 정리 중인 도서입니다.");
+            } else if (selectedBook.getState().equals("분실됨")) {
+                System.out.println("[System] 분실된 도서입니다.");
+            }
+        } catch (NoSuchElementException e) {
+            System.out.println("[System] 존재하지 않는 도서 번호입니다.");
         }
     }
 
@@ -82,37 +86,45 @@ public class NormalRepository implements Repository {
     }
     @Override
     public void returnBook(int id) throws IOException {
-        Book selectedBook = books.stream().filter(book -> book.getId() == id)
-                .findAny()
-                .get();
-        ChangeStateThread thread = new ChangeStateThread(selectedBook);
+        try {
+            Book selectedBook = books.stream().filter(book -> book.getId() == id)
+                    .findAny()
+                    .get();
+            ChangeStateThread thread = new ChangeStateThread(selectedBook);
 
-        if (selectedBook.getState().equals("대여중") || selectedBook.getState().equals("분실됨")) {
-            selectedBook.setState("도서 정리중");
-            updateFile(books, file);
-            thread.start();
+            if (selectedBook.getState().equals("대여중") || selectedBook.getState().equals("분실됨")) {
+                selectedBook.setState("도서 정리중");
+                updateFile(books, file);
+                thread.start();
 
-            System.out.println("[System] 도서가 반납 처리 되었습니다.");
-        } else if(selectedBook.getState().equals("대여 가능")) {
-            System.out.println("[System] 원래 대여가 가능한 도서입니다.");
-        } else {
-            System.out.println("[System] 반납이 불가능한 도서입니다.");
+                System.out.println("[System] 도서가 반납 처리 되었습니다.");
+            } else if (selectedBook.getState().equals("대여 가능")) {
+                System.out.println("[System] 원래 대여가 가능한 도서입니다.");
+            } else {
+                System.out.println("[System] 반납이 불가능한 도서입니다.");
+            }
+        } catch (NoSuchElementException e) {
+            System.out.println("[System] 존재하지 않는 도서 번호 입니다.");
         }
     }
 
     @Override
     public void lostBook(int id) throws IOException {
-        Book selectedBook = books.stream().filter(book -> book.getId() == id)
-                .findAny()
-                .get();
-        if (selectedBook.getState().equals("대여중")) {
-            selectedBook.setState("분실됨");
-            updateFile(books, file);
-            System.out.println("[System] 도서가 분실 처리 되었습니다.");
-        } else if(selectedBook.getState().equals("대여 가능") || selectedBook.getState().equals("도서 정리중")) {
-            System.out.println("[System] 분실 처리가 불가능한 도서입니다.");
-        } else if(selectedBook.getState().equals("분실됨")){
-            System.out.println("[System] 이미 분실 처리된 도서입니다.");
+        try {
+            Book selectedBook = books.stream().filter(book -> book.getId() == id)
+                    .findAny()
+                    .get();
+            if (selectedBook.getState().equals("대여중")) {
+                selectedBook.setState("분실됨");
+                updateFile(books, file);
+                System.out.println("[System] 도서가 분실 처리 되었습니다.");
+            } else if (selectedBook.getState().equals("대여 가능") || selectedBook.getState().equals("도서 정리중")) {
+                System.out.println("[System] 분실 처리가 불가능한 도서입니다.");
+            } else if (selectedBook.getState().equals("분실됨")) {
+                System.out.println("[System] 이미 분실 처리된 도서입니다.");
+            }
+        } catch (NoSuchElementException e) {
+            System.out.println("[System] 존재하지 않는 도서 번호입니다.");
         }
     }
 
