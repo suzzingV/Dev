@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class VoucherService {
+    Voucher voucher;
     public void create() {
 
     }
