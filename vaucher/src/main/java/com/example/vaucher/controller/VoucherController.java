@@ -1,9 +1,10 @@
-package com.example.vaucher;
+package com.example.vaucher.controller;
 
+import com.example.vaucher.service.VoucherService;
 import org.springframework.stereotype.Controller;
 
-import static com.example.vaucher.ConsoleView.exitMessage;
-import static com.example.vaucher.ConsoleView.selectMenu;
+import static com.example.vaucher.view.ConsoleView.exitMessage;
+import static com.example.vaucher.view.ConsoleView.selectMenu;
 
 @Controller
 public class VoucherController {

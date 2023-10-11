@@ -1,4 +1,4 @@
-package com.example.vaucher;
+package com.example.vaucher.voucher;
 
 public class PercentAmountVoucher implements Voucher{
     private long percent;

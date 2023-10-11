@@ -1,4 +1,4 @@
-package com.example.vaucher;
+package com.example.vaucher.voucher;
 
 public class FixedAmountVoucher implements Voucher {
 

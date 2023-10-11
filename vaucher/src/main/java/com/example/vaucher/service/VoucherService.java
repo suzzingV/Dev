@@ -1,5 +1,6 @@
-package com.example.vaucher;
+package com.example.vaucher.service;
 
+import com.example.vaucher.voucher.Voucher;
 import org.springframework.stereotype.Service;
 
 @Service
