@@ -16,6 +16,7 @@ public class JdbcCustomerRepository {
     private final String SELECT_ALL_SQL = "select * from customers";
     private final String INSERT_SQL = "INSERT INTO customers(customer_id, name, email) VALUES (UUID_TO_BIN(?), ?, ?)";
     private final String UPDATE_BY_ID_SQL = "UPDATE customers SET name = ? WHERE customer_id = UUID_TO_BIN(?)";
+    private final String SELECT_BY_NAME_SQL = "select * from customers WHERE name = ?";
     private final String DELETE_ALL_SQL = "DELETE FROM customers";
 
     public static void main(String[] args) {
@@ -28,6 +29,7 @@ public class JdbcCustomerRepository {
         logger.info("created customerId -> {}", customerId);
         customerRepository.insertCustomer(customerId, "new-user", "new-user@gmail.com");
         customerRepository.findAllIds().forEach(v -> logger.info("Found customerId : {}", v));
+        customerRepository.updateCustomerName(customerId, "updated-user");
     }
 
     public List<String> findAllName() {
@@ -113,7 +115,7 @@ public class JdbcCustomerRepository {
         return 0;
     }
 
-    private List<String> findNames(String name) {
+    private List<String> findByNames(String name) {
         List<String> names = new ArrayList<>();
 
         try (
