@@ -1,45 +1,36 @@
 package dev.example.jdbc.customer;
+
 import com.wix.mysql.EmbeddedMysql;
 import com.wix.mysql.config.MysqldConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
-import org.junit.platform.commons.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import javax.sql.DataSource;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.Logger;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static com.wix.mysql.config.Charset.UTF8;
 import static com.wix.mysql.EmbeddedMysql.anEmbeddedMysql;
 import static com.wix.mysql.ScriptResolver.classPathScript;
-import static com.wix.mysql.distribution.Version.v5_7_latest;
+import static com.wix.mysql.config.Charset.UTF8;
 import static com.wix.mysql.config.MysqldConfig.aMysqldConfig;
+import static com.wix.mysql.distribution.Version.v5_7_latest;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringJUnitConfig
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CustomerJdbcRepositoryTest {
+class CustomerNamedJdbcRepositoryTest {
 
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(CustomerJdbcRepositoryTest.class);
     @Configuration
     @ComponentScan(
             basePackages = {"dev.example.jdbc.customer"}
@@ -64,10 +55,15 @@ class CustomerJdbcRepositoryTest {
         public JdbcTemplate jdbcTemplate(DataSource dataSource) {
             return new JdbcTemplate(dataSource);
         }
+
+        @Bean
+        public NamedParameterJdbcTemplate jdbcTemplate(JdbcTemplate jdbcTemplate) {
+            return new NamedParameterJdbcTemplate(jdbcTemplate);
+        }
     }
 
     @Autowired
-    CustomerJdbcRepository customerJdbcRepository;
+    CustomerNamedJdbcRepository customerJdbcRepository;
 
     @Autowired
     DataSource dataSource;
@@ -107,11 +103,7 @@ class CustomerJdbcRepositoryTest {
     @Order(2)
     @DisplayName("고객을 추가할 수 있다.")
     public void testInsert() {
-        try {
-            customerJdbcRepository.insert(newCustomer);
-        } catch (BadSqlGrammarException e) {
-            logger.error("Got BadSqlGrammarException error code -> {}", e.getSQLException().getErrorCode(), e);
-        }
+        customerJdbcRepository.insert(newCustomer);
 
         Optional<Customer> retrievedCustomer = customerJdbcRepository.findById(newCustomer.getCustomerId());
         assertThat(retrievedCustomer.isEmpty()).isFalse();

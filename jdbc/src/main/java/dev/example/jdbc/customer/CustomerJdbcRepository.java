@@ -38,7 +38,7 @@ public class CustomerJdbcRepository implements CustomerRepository {
 
     @Override
     public Customer insert(Customer customer) {
-        int update = jdbcTemplate.update("INSERT INTO customers(customer_id, name, email, create_at) VALUES (UUID_TO_BIN(?), ?, ?, ?)",
+        int update = jdbcTemplate.update("INSERT INTO customers(customer_id, name, email, create_at) VALUES (UNHEX(REPLACE(?, '-', '')), ?, ?, ?)",
                 customer.getCustomerId().toString().getBytes(),
                 customer.getName(),
                 customer.getEmail(),
@@ -51,13 +51,13 @@ public class CustomerJdbcRepository implements CustomerRepository {
 
     @Override
     public Customer update(Customer customer) {
-        int update = jdbcTemplate.update("UPDATE customers SET name = ?, email = ?, last_login_at = ? WHERE customer_id = UUID_TO_BIN(?)",
+        int update = jdbcTemplate.update("UPDATE customers SET name = ?, email = ?, last_login_at = ? WHERE customer_id = UNHEX(REPLACE(?, '-', ''))",
                 customer.getName(),
                 customer.getEmail(),
                 customer.getLastLoginAt() != null ? Timestamp.valueOf(customer.getLastLoginAt()) : null,
                 customer.getCustomerId().toString().getBytes());
         if (update != 1) {
-            throw new RuntimeException("Nothing was updateed.");
+            throw new RuntimeException("Nothing was updated.");
         }
         return customer;
     }
@@ -69,7 +69,7 @@ public class CustomerJdbcRepository implements CustomerRepository {
     @Override
     public Optional<Customer> findById(UUID customerId) {
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject("select * from customers WHERE customer_id = UUID_TO_BIN(?)",
+            return Optional.ofNullable(jdbcTemplate.queryForObject("select * from customers WHERE customer_id = UNHEX(REPLACE(?, '-', ''))",
                     customerRowMapper,
                     customerId.toString().getBytes()));
         } catch (EmptyResultDataAccessException e) {

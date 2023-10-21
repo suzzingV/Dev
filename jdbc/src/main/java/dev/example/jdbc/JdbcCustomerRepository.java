@@ -1,4 +1,5 @@
 package dev.example.jdbc;
+import dev.example.jdbc.customer.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,14 +23,16 @@ public class JdbcCustomerRepository {
     public static void main(String[] args) {
         JdbcCustomerRepository customerRepository = new JdbcCustomerRepository();
 
-        int count = customerRepository.deleteAllCustomer();
-        logger.info("deleted count -> {}", count);
+//        customerRepository.transactionTest(new Customer(UUID.fromString("e9a6b7c7-6e3d-11ee-985c-0242ac110002"), "update-user", "test00@gmail.com", LocalDateTime.now()));
 
+//        int count = customerRepository.deleteAllCustomer();
+//        logger.info("deleted count -> {}", count);
+//
         UUID customerId = UUID.randomUUID();
-        logger.info("created customerId -> {}", customerId);
-        customerRepository.insertCustomer(customerId, "new-user", "new-user@gmail.com");
-        customerRepository.findAllIds().forEach(v -> logger.info("Found customerId : {}", v));
-        customerRepository.updateCustomerName(customerId, "updated-user");
+//        logger.info("created customerId -> {}", customerId);
+        customerRepository.insertCustomer(customerId, "new-user", "test00@gmail.com");
+//        customerRepository.findAllIds().forEach(v -> logger.info("Found customerId : {}", v));
+//        customerRepository.updateCustomerName(customerId, "updated-user");
     }
 
     public List<String> findAllName() {
@@ -113,6 +116,26 @@ public class JdbcCustomerRepository {
             logger.error("Got error while closing connection", e);
         }
         return 0;
+    }
+
+    public void transactionTest(Customer customer) {
+        String updateNameSql = "UPDATE customers SET name = ? WHERE customer_id = UUID_TO_BIN(?)";
+        String updateEmailSql = "UPDATE customers SET name = ? WHERE customer_id = UUID_TO_BIN(?)";
+
+//        Connection con = null;
+        try (
+                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/order_mgmt", "root", "root1234!");
+                PreparedStatement updateNameStatement = connection.prepareStatement(updateNameSql);
+                PreparedStatement updateEmailStatement = connection.prepareStatement(updateEmailSql);
+        ) {
+            updateNameStatement.setString(1, customer.getEmail());
+            updateNameStatement.setBytes(2, customer.getCustomerId().toString().getBytes());
+
+            updateNameStatement.setString(1, customer.getName());
+            updateNameStatement.setBytes(2, customer.getCustomerId().toString().getBytes());
+        } catch (SQLException e) {
+            logger.error("Got error while closing connection", e);
+        }
     }
 
     private List<String> findByNames(String name) {

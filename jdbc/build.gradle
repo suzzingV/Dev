@@ -34,6 +34,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.1.0'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	testImplementation 'com.wix:wix-embedded-mysql:4.6.1'
 }
 
 tasks.named('test') {
