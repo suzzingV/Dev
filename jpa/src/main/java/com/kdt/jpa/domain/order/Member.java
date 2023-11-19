@@ -12,10 +12,10 @@ import java.util.List;
 @Table(name = "member")
 @Getter
 @Setter
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "name", nullable = false, length = 30)
@@ -32,7 +32,7 @@ public class Member {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
     public void addOrder(Order order) {
