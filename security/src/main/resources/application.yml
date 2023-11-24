@@ -12,5 +12,13 @@ spring:
     basename: i18n/messages
     encoding: UTF-8
     cache-duration: PT1H
-  server:
-    port: 8080
+server:
+  port: 443
+  ssl:
+    enabled: true
+    key-alias: prgrms_keystore
+    key-store: C:\atti\Dev\security\src\main\resources\prgrms_keystore.p12
+    key-store-password: prgrms123
+    key-password: prgrms123
+    trust-store: C:\atti\Dev\security\src\main\resources\prgrms_trusstore.p12
+    trust-store-password: prgrms123
