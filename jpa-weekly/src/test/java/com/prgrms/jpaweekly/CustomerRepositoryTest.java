@@ -1,6 +1,7 @@
 package com.prgrms.jpaweekly;
 
-import com.prgrms.jpaweekly.domain.Customer;
+import com.prgrms.jpaweekly.customer.Customer;
+import com.prgrms.jpaweekly.customer.CustomerRepository;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
