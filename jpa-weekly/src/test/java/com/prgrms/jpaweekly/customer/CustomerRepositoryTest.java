@@ -1,4 +1,4 @@
-package com.prgrms.jpaweekly;
+package com.prgrms.jpaweekly.customer;
 
 import com.prgrms.jpaweekly.customer.Customer;
 import com.prgrms.jpaweekly.customer.CustomerRepository;
